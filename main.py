@@ -1,10 +1,11 @@
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 
 app = FastAPI()
 
-@app.get("/")
+@app.get("/", response_class= HTMLResponse)
 def home():
-    return {"message": "Welcome to the FastAPI Blog! edit"}
+    return f"<h1>{posts[0]['title']}</h1>"
 
 posts: list[dict] = [
     {"id": 1, "author": "Hirenkumar", "title": "Fast API", "content": "This is awsome", "date_posted": "2022"},
