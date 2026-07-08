@@ -10,3 +10,5 @@ class PostResponse(PostBase):
     id: int
     date_posted: str
     
+class PostCreate(PostBase): 
+    pass

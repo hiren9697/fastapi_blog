@@ -1,6 +1,6 @@
 from fastapi.responses import JSONResponse
 from fastapi import HTTPException, Request, status
-from schemas import PostResponse
+from schemas import PostResponse, PostCreate
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.exceptions import RequestValidationError
@@ -24,12 +24,25 @@ def home():
 def get_posts():
     return posts
 
-@app.get("/post/{post_id}")
+@app.get("/api/post/{post_id}")
 def post_page(post_id: int):
     for post in posts: 
         if post['id'] == post_id:
             return post 
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post with id {post_id} not found")
+
+@app.post("/api/posts", response_model=PostResponse, status_code=   status.HTTP_201_CREATED)
+def create_post(post: PostCreate):
+    new_id = max(p["id"] for p in posts) + 1 if posts else 1
+    new_post = {
+        "id": new_id,
+        "author": post.author,
+        "title": post.title,
+        "content": post.content,
+        "date_posted": "April 23, 2025",
+    }
+    posts.append(new_post)
+    return new_post
 
 # MARK: - Exception Handlers
 @app.exception_handler(RequestValidationError)
