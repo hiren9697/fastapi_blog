@@ -1,3 +1,4 @@
+from fastapi import HTTPException, status
 from schemas import PostResponse
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
@@ -17,3 +18,10 @@ posts: list[dict] = [
 @app.get("/api/posts", response_model=list[PostResponse])
 def get_posts():
     return posts
+
+@app.get("/post/{post_id}")
+def post_page(post_id: int):
+    for post in posts: 
+        if post['id'] == post_id:
+            return post 
+    return HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post with id {post_id} not found")
