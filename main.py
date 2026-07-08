@@ -1,3 +1,4 @@
+from schemas import PostResponse
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 
@@ -13,6 +14,6 @@ posts: list[dict] = [
     {"id": 2, "author": "John", "title": "Fast API", "content": "This is awsome", "date_posted": "2022"}
 ]
 
-@app.get("/api/posts")
+@app.get("/api/posts", response_model=list[PostResponse])
 def get_posts():
     return posts
